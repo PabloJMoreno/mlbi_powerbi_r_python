@@ -1,0 +1,60 @@
+## Clustering
+
+from pycaret.clustering import *
+dataset = get_clusters(data = dataset)
+
+# Clustering Ejemplo 1
+
+from pycaret.clustering import *
+dataset = get_clusters(data = dataset, model = ‘kmeans’, num_clusters = 7)
+
+# Clustering - análisis de codo
+
+from pycaret.clustering import *
+s = setup(data = dataset, html = False, silent = True, verbose = False)
+modelo = create_model('kmeans')
+plot_model(modelo, plot = 'elbow')
+
+# Clustering Ejemplo 2
+
+from pycaret.clustering import *
+dataset = get_clusters(data = dataset, model = 'kmeans', num_clusters = 5)
+
+## Asociación 
+
+from pycaret.arules import *
+dataset = get_rules(dataset = ‘nombre_dataset’, transaction_id = 'columna_1', item_id = 'columna_2')
+
+# Asociación Ejemplo 1
+
+from pycaret.arules import *
+dataset = get_rules(dataset, transaction_id = 'cliente', item_id = 'producto')
+
+# Asociación Ejemplo 2
+
+from pycaret.arules import *
+dataset = get_rules(dataset, transaction_id = 'requestor', item_id = 'FiledAgainst')
+
+## Detección de Anomalías 
+
+from pycaret.anomaly import *
+dataset = get_outliers(data = dataset)
+
+# Anomalías Ejemplo 1
+
+from pycaret.anomaly import *
+dataset = get_outliers(data = dataset, model = 'iforest')
+
+# Anomalías Ejemplo 2
+
+from pycaret.anomaly import *
+dataset = get_outliers(data = dataset, model = 'iforest', fraction = 0.035)
+
+# Anomalías Ejemplo 3
+
+from pycaret.anomaly import *
+dataset = get_outliers(
+data = dataset, 
+model = 'iforest', 
+fraction = 0.1, 
+ignore_features = ['CALENDAR_YEAR', 'CALENDAR_MONTH', 'AGENCYNBR', 'AGENCYNAME', 'ITEM_DESCR', 'MERCHANT', 'TRANSACTION_DATE', 'POST_DATE', 'ROWID'])
