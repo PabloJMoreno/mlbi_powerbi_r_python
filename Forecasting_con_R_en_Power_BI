@@ -1,0 +1,76 @@
+# Método Naive
+
+library(forecast)
+
+ts <- ts(dataset$columna, start, end, frequency = X)
+modelo <- naive(ts, h = XX)   # h son los puntos adelante a predecir
+dataset_prediccion <- as.data.frame(modelo) # produce un dataframe con predicción
+dataset_prediccion$dia <- 1:nrow(dataset_prediccion)
+dataset_prediccion
+
+# Simple Exponential Smooth
+
+library(forecast)
+
+ts <- ts(dataset$columna, start, end, frequency = X)
+modelo <- ses(ts, h = XX)   # h son los puntos adelante a predecir
+dataset_prediccion <- as.data.frame(modelo)
+dataset_prediccion$dia <- 1:nrow(dataset_prediccion)
+dataset_prediccion
+
+# Holt Trend
+
+library(forecast)
+
+ts <- ts(dataset$columna, start, end, frequency = X)
+modelo <- holt(ts, h = XX)   # h son los puntos adelante a predecir
+dataset_prediccion <- as.data.frame(modelo)
+dataset_prediccion$dia <- 1:nrow(dataset_prediccion)
+dataset_prediccion
+
+# ARIMA
+
+library(forecast)
+
+ts <- ts(dataset$columna, start, end, frequency = X)
+arima <- auto.arima(ts)   # creación del modelo ARIMA
+modelo <- forecast::forecast(arima, h = XX) # h son los puntos adelante a predecir
+dataset_prediccion <- as.data.frame(modelo) 
+dataset_prediccion$dia <- 1:nrow(dataset_prediccion)
+dataset_prediccion
+
+# TBATS
+
+library(forecast)
+
+ts <- ts(dataset$columna, start, end, frequency = X)
+tbats <- tbats(ts)   # creación del modelo TBATS
+modelo <- forecast::forecast(tbats, h = XX) # h son los puntos adelante a predecir
+dataset_prediccion <- as.data.frame(modelo)
+dataset_prediccion$dia <- 1:nrow(dataset_prediccion)
+dataset_prediccion
+
+# Ejemplo 1
+library(forecast)
+
+ts <- ts(dataset$Close, start = c(2016, 03, 7), frequency = 260)
+arima <- auto.arima(ts)   # creación del modelo ARIMA
+modelo <- forecast::forecast(arima, h = 180) # h son los puntos adelante a predecir
+dataset_prediccion <- as.data.frame(modelo) 
+
+dataset_prediccion$dia <- 1:nrow(dataset_prediccion)
+dataset_prediccion
+
+# Prophet
+library(prophet)
+
+m <- prophet(dataset)
+futuro <- make_future_dataframe(m, periods=XXX, include_history=TRUE)
+prediccion <- predict(m, futuro)
+
+# Ejemplo Prophet 
+library(prophet)
+
+m <- prophet(dataset)
+futuro <- make_future_dataframe(m, periods=180, include_history=TRUE)
+prediccion <- predict(m, futuro)
