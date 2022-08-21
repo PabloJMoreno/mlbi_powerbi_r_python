@@ -1,0 +1,90 @@
+## Clasificación 
+
+from pycaret.classification import *
+
+s = setup(data = dataset, target = ‘nombre_de_columna’, html = False, verbose = False, silent = True)
+modelo = create_model(‘nombre_de_modelo’)
+modelo_final = finalize_model(modelo)
+save_model(modelo_final, r’C:\Nombre_de_Directorio\...\nombre_de_modelo’)
+
+# AutoML Clasificación 
+
+from pycaret.regression import *
+
+s = setup(data = dataset, target = ‘nombre_de_columna’, html = False, verbose = False, silent = True)
+mejor_modelo = compare_models()
+modelo = create_model(mejor_modelo)
+modelo_final = finalize_model(modelo)
+save_model(modelo_final, r’C:\Nombre_de_Directorio\...\nombre_de_modelo’)
+
+# Carga de modelo y nuevas predicciones
+
+from pycaret.classification import *
+
+modelo_final = load_model(r’C:\Nombre_de_Directorio\...\nombre_de_modelo’)
+dataset = predict_model(modelo_final, data = dataset)
+
+# Clasificación Ejemplo 1 (bivariable)
+
+from pycaret.classification import *
+
+s = setup(data = dataset, target = 'abandono', session_id = 100, 
+html = False, 
+silent = True, 
+verbose = False)
+
+modelo = create_model('rf')
+modelo_final = finalize_model(modelo)
+save_model(modelo_final, r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_empleados')
+_________________________________________________________________________________________
+
+from pycaret.classification import *
+
+modelo = load_model(r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_empleados')
+dataset = predict_model(modelo, data = dataset)
+
+# Clasificación  Ejemplo 2 (multivariable)
+
+from pycaret.classification import *
+
+s = setup(data = dataset, target = 'cobertura', session_id = 100,
+ignore_features = ['cliente_id'], 
+numeric_features = ['prima_mensual', 'meses_sin_reclamo', 'meses_poliza', 'reclamos', 'polizas'],
+html = False, 
+silent = True, 
+verbose = False)
+
+modelo = create_model('rf')
+modelo_final = finalize_model(modelo)
+save_model(modelo_final, r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_polizas')
+_______________________________________________________________________________________
+
+from pycaret.classification import *
+
+modelo = load_model(r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_polizas')
+dataset = predict_model(modelo, data = dataset)
+
+# Clasificación Ejemplo 3 (bivariable desbalanceada)
+
+from pycaret.classification import *
+
+s = setup(data = dataset, target = 'Fraud', session_id = 100, 
+categorical_features = ['Region', 'State', 'Area', 'City', 'Consumer_profile', 'Product_type', 'Purchased_from', 'Purpose'], 
+numeric_features = ['AC_1001_Issue', 'AC_1002_Issue', 'AC_1003_Issue', 'TV_2001_Issue', 'TV_2002_Issue', 'TV_2003_Issue', 'Claim_Value', 'Service_Centre', 'Product_Age', 'Call_details'], 
+fix_imbalance = True, 
+fix_imbalance_method = None,  
+html = False, 
+verbose = False, 
+silent = True)
+
+modelo = create_model('rf')
+modelo_final = finalize_model(modelo)
+save_model(modelo_final, r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_reclamos')
+________________________________________________________________________________________
+
+from pycaret.classification import *
+
+modelo = load_model(r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_reclamos')
+dataset = predict_model(modelo, data = dataset)
+
+
