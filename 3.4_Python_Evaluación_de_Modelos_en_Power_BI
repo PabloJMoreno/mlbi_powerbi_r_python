@@ -1,0 +1,62 @@
+## Evaluación de Modelos
+
+# Regresión
+
+from pycaret.regression import *
+
+s = setup(data = dataset, target = 'nombre_columna', silent = True, verbose = False, html = False)
+mejor_modelo = compare_models()
+modelos = pull()
+
+# Clasificación
+
+from pycaret.classification import *
+
+s = setup(data = dataset, target = 'nombre_columna', silent = True, verbose = False, html = False)
+mejor_modelo = compare_models()
+modelos = pull()
+
+# Evaluación Ejemplo 1 
+
+from pycaret.classification import *
+
+clf = setup(dataset, target = 'abandono', silent=True, verbose=False, html=False, session_id=123)
+best_model = compare_models()
+models = pull()
+
+## Validación de resultados
+
+# Regresión 
+
+from pycaret.regression import *
+s = setup(data = dataset, target = ‘nombre_columna’, html = False, verbose = False, silent = True)
+modelo = create_model(‘nombre_de_modelo’)
+plot_model(modelo, plot = ‘tipo_grafico’)
+
+# Clasificación
+
+from pycaret.classification import *
+s = setup(data = dataset, target = ‘nombre_columna’, html = False, verbose = False, silent = True)
+modelo = create_model(‘nombre_modelo’)
+plot_model(modelo, plot = ‘tipo_grafico’)
+
+# Regresión Ejemplo 1
+
+from pycaret.regression import *
+s = setup(data = dataset, target = 'MEDV', session_id = 100, html = False, verbose = False, silent = True)
+modelo = create_model('xgboost')
+plot_model(modelo, plot = 'residuals')
+__________________________________________________________________________________________________________
+
+from pycaret.regression import *
+s = setup(data = dataset, target = 'MEDV', session_id = 100, html = False, verbose = False, silent = True)
+modelo = create_model('xgboost')
+plot_model(modelo, plot = 'feature')
+
+# Clasificación Ejemplo 2
+
+from pycaret.classification import *
+s = setup(data = dataset, target = 'abandono', session_id = 100, html = False, verbose = False, silent = True)
+modelo = create_model('rf')
+plot_model(modelo, plot = 'confusion_matrix')
+
