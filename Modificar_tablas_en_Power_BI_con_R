@@ -1,0 +1,43 @@
+# Modificar estructura de tabla
+library(tidyverse)
+msleep <- msleep
+df <- msleep %>% 
+   filter( order == “Primates”, sleep_total > 10) %>%
+   select(name, sleep_total, sleep_rem, sleep_cycle) %>%
+   rename( total = sleep_total, rem = sleep_rem, cycle = sleep_cycle) %>%
+   arrange( desc( total ) ) %>%
+   mutate( sleep_total_min = total * 60 )
+
+# Limpiar títulos de columna
+library(tidyverse)
+library(janitor)
+mi_tabla <- dataset %>% clean_names()
+
+# Tratamiento de valores nulos
+dataset$columna[ is.na(dataset$columna) ] = mean( dataset$columna, na.rm = TRUE )
+mi_tabla <- dataset
+
+dataset$largo[ is.na(dataset$largo) ] = mean( dataset$largo, na.rm = TRUE )
+dataset$alto[ is.na(dataset$alto) ] = mean( dataset$alto, na.rm = TRUE )
+nulos <- dataset
+
+# Escalar y centrar valores
+dataset$nueva_columna <- scale(dataset$columna, center = TRUE, scale = TRUE)
+mi_tabla <- dataset
+
+# Desviación sobre la media
+dataset$nueva_columna <- dataset$columna / mean(dataset$columna) 
+mi_tabla <- dataset
+
+# Porcentaje sobre el total
+dataset$nueva_columna <- dataset$columna / sum( dataset$columna )
+mi_tabla <- dataset
+
+# Suma acumulativa
+dataset$nueva_columna <- cumsum( dataset$columna )
+mi_tabla <- dataset
+
+# Salto de línea 
+Library(tidyverse) 
+dataset$nueva_columna <- lag( dataset$columna, X)
+mi_tabla <- dataset
