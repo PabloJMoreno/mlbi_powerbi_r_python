@@ -1,0 +1,128 @@
+## Creación de Web-app con Power BI
+
+# Regresión 
+
+Método de regresión 
+
+# Paste or type your script code here:
+import pandas as pd 
+import numpy as np
+from pycaret.regression import *
+
+modelo = load_model(r'C:\...\modelo_entrenado')
+
+# Creamos el dataset de predicción
+df1 = predict_model(modelo, data = dataset)
+df = df1[['Label']]
+
+# si quiere cambiar el nombre a las columnas:
+df.rename(columns = {'Label' : 'Variable Estimada'}, inplace = True)
+
+# si quiere cambiar el formato numérico con separadores de miles
+df.update(df[['Predicted Charges']].applymap('{:,.2f}'.format))
+
+# Creamos visualización para mostrar valores estimados
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+
+table = plt.table(cellText = df.values, loc='center', colLabels = df.columns, cellLoc = 'center', edges = 'open')
+table.auto_set_font_size(False)
+table.set_fontsize(24)
+table.set_zorder(0)
+table.scale(5,5)
+plt.axis('tight')
+plt.axis('off')
+plt.show()
+
+Método de clasificación 
+
+# Paste or type your script code here:
+import pandas as pd 
+import numpy as np
+from pycaret.regression import *
+
+modelo = load_model(r'C:\...\modelo_entrenado')
+
+# Crear prediccion
+df1 = predict_model(model0, data = dataset)
+df = df1[['Label', 'Score']]
+
+# si quiere cambiar el nombre a las columnas:
+df.rename(columns = {'Label' : 'variable_objetivo_Estimada', 'Score' : 'Probabilidad'}, inplace = True)
+# si quiere cambiar el formato numérico con separadores de miles
+df.update(df[['Probabilidad']].applymap('{:,.2f}'.format))
+
+# Crear visualizacion
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+
+table = plt.table(cellText = df.values, loc='center', colLabels = df.columns, cellLoc = 'center')
+plt.show()
+
+# Implementación Ejemplo 1
+
+# Paste or type your script code here:
+from pycaret.regression import *
+model = load_model(r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_seguros')
+
+# Creamos el dataset de prediccion
+pd.options.display.float_format = '{:, .2f}'.format
+df1 = predict_model(model, data = dataset)
+df = df1[['Label']]
+df.rename(columns = {'Label' : 'Gastos Estimados'}, inplace = True)
+df.update(df[['Gastos Estimados']].applymap('{:,.2f}'.format))
+
+# Creamos visualizacion para mostrar valores estimados
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+
+table = plt.table(cellText = df.values, loc='center', colLabels = df.columns, cellLoc = 'center', edges = 'open')
+table.auto_set_font_size(False)
+table.set_fontsize(24)
+table.set_zorder(0)
+table.scale(5,5)
+plt.axis('tight')
+plt.axis('off')
+plt.show()
+
+____________________________________________________________________________________________________________________________
+
+# Paste or type your script code here:
+from pycaret.regression import *
+model = load_model(r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_seguros')
+
+# Creamos el dataset de prediccion
+pd.options.display.float_format = '{:, .2f}'.format
+df1 = predict_model(model, data = dataset)
+df = df1[['Label']]
+df.rename(columns = {'Label' : 'Gastos Estimados'}, inplace = True)
+
+# visualizacion para mostrar valores estimados
+import matplotlib.pyplot as plt
+
+fig = plt.figure()
+df=pd.DataFrame(df)
+
+table = plt.table(cellText = df.values, loc='center', colLabels = df.columns, cellLoc = 'center')
+table.auto_set_font_size(False)
+table.set_fontsize(24)
+table.scale(5,5)
+plt.show()
+
+________________________________________________________________________________________________________________________________
+
+from pycaret.regression import *
+
+s = setup(data = dataset, target = 'gastos', session_id = 100,
+categorical_features = ['genero', 'fumador', 'region'],
+numeric_features = ['edad', 'imc', 'hijos'],
+html = False, 
+verbose = False, 
+silent = True)
+modelo = create_model('lightgbm')
+
+plot_model(modelo, plot = 'feature')
+
