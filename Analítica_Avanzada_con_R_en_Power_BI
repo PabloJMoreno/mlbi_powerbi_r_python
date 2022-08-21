@@ -1,0 +1,103 @@
+# Regresión Lineal simple
+
+modelo <- lm(ahorros ~ ingreso, data = dataset)
+dataset$pred <- predict(modelo, newdata = dataset)
+clientes <- dataset
+clientes
+
+# Regresión Lineal múltiple 
+
+modelo <- lm(edad ~ ingreso + gasto + ahorros, data = dataset)
+dataset$pred <- predict(modelo, newdata = dataset)
+clientes <- dataset
+clientes
+
+# Regresión Lineal sobre una serie temporal
+
+modelo <- lm(ventas ~ d, data = dataset)
+dataset$pred <- predict(modelo, newdata = dataset)
+reg_lin_ts <- dataset
+reg_lin_ts 
+
+
+# Regresión No Lineal
+
+library(mgcv)
+
+gam <- gam(y ~ s(x), data = dataset)
+dataset$pred <- predict(gam, dataset)
+frame <- dataset
+
+# Ejemplo de Regresión No Lineal
+
+library(mgcv)
+gam <- gam(y ~ s(x), data = dataset)
+dataset$pred <- predict(gam, dataset)
+frame <- dataset
+
+# Regresión Logística simple
+
+modelo <- glm( abandoned ~ satisfaction + evaluation + projects + hours + tenure + accidents + promoted, data = dataset, binomial(link = "logit") )
+dataset$pred <- predict(modelo, newdata = dataset, type = "response")
+empleados <- dataset
+empleados
+
+# Implementación de Red Neuronal
+
+normalize <- function(x) {
+ return((x - min(x)) / (max(x) - min(x)))}
+
+concrete_norm <- as.data.frame(lapply(dataset, normalize))
+
+concrete_train <- concrete_norm[1:773,]
+concrete_test <- concrete_norm[774:1030,]
+
+library("neuralnet")
+
+modelo <- neuralnet(strength ~ cement + slag + ash + water + superplastic + coarseagg + fineagg + age, data = concrete_train)
+
+modelo_resultado <- compute(modelo, concrete_test[1:8]) 
+prediccion_strength <- modelo_resultado$net.result
+
+output<-dataset[774:1030, ]
+output$strength_norm<-concrete_norm$strength[774:1030]
+output$Pred<-prediccion_strength
+
+## Puesta en Producción de un proyecto de ML con R en Power BI
+
+# Instalen los siguientes paquetes, en caso de que no los tengan
+install.packages(“caret”)
+install.packages(“mlbench”)
+install.packages(“randomForest”)
+
+# Cargamos las librerias
+library(caret)
+library(mlbench)
+library(randomForest)
+
+# cargamos el dataset. Usaremos 'Sonar' que ya viene pre-cargado
+data(Sonar)
+Sonar <- Sonar
+
+# exploramos el dataset
+Sonar
+set.seed(7)
+
+# Hacemos una particicion 80%/20% para entrenamiento y validacion
+validacion_indice <- createDataPartition(Sonar$Class, p=0.80, list=FALSE)
+validacion <- Sonar[-validacion_indice,]
+entrenamiento <- Sonar[validacion_indice,]
+
+# creamos el modelo predictivo
+set.seed(7)
+modelo_final <- randomForest(Class~., entrenamiento, mtry=2, ntree=2000)
+
+# guardamos el modelo predictivo
+saveRDS(final_model, "./final_rf_model.rds")
+
+# Ejecutar en Power query
+library(mlbench)
+library(randomForest)
+modelo <- readRDS("C:\\Users\\Pablo_J_Moreno\\Documents\\final_rf_model.rds")
+prediccion <- predict(modelo, dataset)
+Sonar_prediccion <- cbind(dataset, prediccion)
