@@ -1,0 +1,111 @@
+## Regresión 
+
+from pycaret.regression import *
+
+s = setup(data = dataset, target = ‘nombre_de_columna’, html = False, verbose = False, silent = True)
+modelo = create_model(‘nombre_de_modelo’)
+modelo_final = finalize_model(modelo)
+save_model(modelo_final, r’C:\Nombre_de_Directorio\...\nombre_de_modelo’)
+
+# Regresión AutoML 
+
+from pycaret.regression import *
+
+s = setup(data = dataset, target = ‘nombre_de_columna’, html = False, verbose = False, silent = True)
+mejor_modelo = compare_models()
+modelo = create_model(mejor_modelo)
+modelo_final = finalize_model(modelo)
+save_model(modelo_final, r’C:\Nombre_de_Directorio\...\nombre_de_modelo’)
+
+# Aplicación de modelo a nuevas predicciones
+
+from pycaret.regression import *
+
+modelo_final = load_model(r’C:\Nombre_de_Directorio\...\nombre_de_modelo’)
+dataset = predict_model(modelo_final, data = dataset)
+
+# Regresión Ejemplo 1
+
+from pycaret.regression import *
+s = setup(data = dataset, target = 'MEDV', html = False, verbose = False, silent = True)
+modelo = create_model('xgboost')
+modelo_final = finalize_model(modelo)
+save_model(modelo_final, r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_boston')
+
+from pycaret.regression import *
+modelo_final = load_model(r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_boston')
+dataset = predict_model(modelo_final, data = dataset)
+
+# Regresión  Ejemplo 2
+
+from pycaret.regression import *
+s = setup(data = dataset, target = 'gastos', session_id = 100,
+categorical_features = ['genero', 'fumador', 'region'],
+numeric_features = ['edad', 'imc', 'hijos'],
+html = False, 
+verbose = False, 
+silent = True)
+modelo = create_model('lightgbm')
+modelo_final = finalize_model(modelo)
+save_model(modelo, r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_seguros')
+
+from pycaret.regression import *
+modelo = load_model(r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_seguros')
+dataset = predict_model(modelo, data = dataset)
+
+# Regresión para series temporales
+
+from pycaret.regression import *
+
+s = setup(data = dataset, target = 'ventas', session_id = 100, 
+categorical_features = ['a'], 
+numeric_features = ['m', 'd', 'dds'],
+fold_strategy = 'timeseries',  
+transformation = True, 
+transformation_method = 'yeo-johnson', 
+combine_rare_levels = True, 
+rare_level_threshold = 0.1, 
+remove_multicollinearity = True, 
+multicollinearity_threshold = 0.95,
+html = False, 
+verbose = False, 
+silent = True)
+
+modelo = create_model('et')
+modelo_final = finalize_model(modelo)
+save_model(modelo_final, r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_ventas')
+______________________________________________________________________________________
+from pycaret.regression import *
+
+modelo = load_model(r'C:\Users\Pablo_J_Moreno\Documents\modelos\modelo_ventas')
+dataset = predict_model(modelo, data = dataset)
+
+# Regresión para series temporales múltiples 
+
+from pycaret.regression import *
+
+s = setup(data = dataset, target = 'ventas', session_id = 100,
+categorical_features = ['a', 'servicio', 'tienda'],
+numeric_features = ['m', 'd', 'dds'],
+fold_strategy = 'timeseries', 
+transformation = True,
+transformation_method = 'yeo-johnson',
+combine_rare_levels = True,
+rare_level_threshold = 0.1,
+remove_multicollinearity = True,
+multicollinearity_threshold = 0.95,
+html = False,
+verbose = False,
+silent = True)
+
+modelo = create_model('rf')
+modelo_final = finalize_model(modelo)
+save_model(modelo_final, r'C:\Users\pmore\OneDrive\Documents\modelos\modelo_ventas_multiple')
+_______________________________________________________________________________________________
+
+from pycaret.regression import *
+ 
+modelo = load_model(r'C:\Users\pmore\OneDrive\Documents\modelos\modelo_ventas_multiple')
+dataset = predict_model(modelo, data = dataset)
+
+
