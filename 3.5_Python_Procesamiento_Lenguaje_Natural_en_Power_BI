@@ -1,0 +1,118 @@
+# eliminar caracteres especiales
+
+def limpiar(txt):
+    txt = txt.str.replace('(<br/>)', '')
+    txt = txt.str.replace('(<a).*(>).*(</a>)', '')
+    txt = txt.str.replace('(&amp)', '')
+    txt = txt.str.replace('(&gt)', '')
+    txt = txt.str.replace('(&lt)', '')
+    txt = txt.str.replace('(\xa0)', '')
+    return txt
+
+dataset['nombre_columna'] = limpiar(dataset[' nombre_columna '])
+
+# eliminar signos y puntuación
+
+dataset[' nombre_columna '] = dataset[' nombre_columna '].str.replace('[^\w\s]', '')
+
+# filtrado por frecuencia
+
+dataset = dataset[dataset.groupby(‘columna’)[‘columna’].transform(‘size’) > X]
+
+# filtrado de stopwords
+
+# importamos el paquete y la función stopwords
+import nltk
+nltk.download('stopwords')
+from nltk.corpus import stopwords
+
+# importamos el diccionario y guardamos en una variable
+stop = stopwords.words('spanish')
+
+# aplicamos el diccionario a la columna excluyendo las palabras coincidentes
+dataset['columna'] = dataset['columna'].apply(lambda x: ' '.join(x for x in x.split() if x not in stop))
+dataset
+
+# aislamiento de palabras raras
+
+import pandas as pd
+frec = pd.Series(' '.join(dataset['columna']).split()).value_counts()
+palabras_raras = list(frec[frec == 1].index)
+________________________________________________________________________
+
+import pandas as pd
+frec = pd.Series(' '.join(dataset['columna']).split()).value_counts()
+palabras_raras = list(frec[frec == 1].index)
+
+dataset['columna'] = dataset['columna'].apply(lambda x: ' '.join(x for x in x.split() if x not in less_freq))
+
+# Stemming de texto 
+# importamos los paquetes y funciones
+from textblob import TextBlob, Word, Blobber
+from nltk.stem import PorterStemmer
+
+# activacion de la fucion stemming
+st = PorterStemmer()
+
+# aplicación de la función stemming a la columna que contiene el texto
+dataset['columna'] = dataset['columna'].apply(lambda x: ' '.join([st.stem(word) for word in x.split()]))
+
+# Lemmatizacion de texto
+import nltk
+from nltk.stem import WordNetLemmatizer
+nltk.download('averaged_perceptron_tagger')
+from nltk.corpus import wordnet
+  
+lemmatizer = WordNetLemmatizer()
+
+dataset[‘columna’] = nltk.pos_tag(nltk.word_tokenize(dataset[‘columna’]))  
+
+# Conteo y longitud de palabras
+dataset['longitud'] = dataset['columna'].astype(str).apply(len)
+dataset['palabras'] = dataset['columna'].apply(lambda x: len(str(x).split()))
+
+# Análisis de frecuencia y vectorizacion
+# importamos los paquetes y funciones
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+
+# creamos una función para calcular la frecuencia de palabras
+def obtener_frecuencia(corpus, n = None):
+    vec = CountVectorizer().fit(corpus)
+    bag_of_words = vec.transform(corpus)
+    sum_words = bag_of_words.sum(axis = 0)
+    words_freq = [(word, sum_words[0, idx]) for word, idx in vec.vocabulary_.items()]
+    words_freq = sorted(words_freq, key = lambda x: x[1], reverse = True)
+    return words_freq[:n]
+
+# aplicamos la función creada a la columna de datos y delimitamos por Top 20
+Palabras_comunes = obtener_fecuencia(dataset['columna'], 20)
+
+# creamos un nuevo dataframe con las palabras y su frecuencia
+dataset = pd.DataFrame(palabras_comunes, columns = ['columna', 'conteo'])
+
+# Bigramas y Trigramas
+# importamos los paquetes y funciones
+import pandas as pd
+from sklearn.feature_extraction.text import CountVectorizer
+
+# creamos la fucion de agrupación de palabras. Cambiamos ‘range’ para cambiar el tamaño de grupo
+def agrupar(corpus, n=None):
+    vec = CountVectorizer(ngram_range=(3, 3), stop_words='english').fit(corpus)
+    bolsa = vec.transform(corpus)
+    suma = bolsa.sum(axis=0)
+    frecuencia = [(word, suma[0, idx]) for word, idx in vec.vocabulary_.items()]
+    frecuencia = sorted(frecuencia, key = lambda x: x[1], reverse=True)
+
+# creamos el set de datos con los Top 30 grupos de trigrams 
+trigram = agrupar(dataset['columna'], 30)
+dataset = pd.DataFrame(trigram, columns = ['columna' , 'Count'])
+dataset.groupby('columna').sum()
+
+# Si se pretende la construcción de bigramas, el único cambio necesario es:
+vec = CountVectorizer(ngram_range=(2, 2), stop_words='english').fit(corpus)
+
+# Análisis de sentimiento
+from textblob import TextBlob, Word, Blobber
+dataset['polaridad'] = dataset['columna'].map(lambda text: TextBlob(text).sentiment.polarity)
+
