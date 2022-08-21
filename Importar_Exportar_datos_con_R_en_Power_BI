@@ -1,0 +1,99 @@
+# Importar y Exportar datos en Power BI con R
+
+# Importar csv
+dataframe <- read.csv(‘ubicacion de documento.csv’)
+
+# Importar csv (con tidyverse)
+library(tidyverse)
+dataframe <- read_csv(‘ubicacion de documento.csv’)
+
+# Importar Excel
+
+library(readxl)
+data_excel <- read_excel(“documento.xlsx”, sheet = 1)
+data_excel <- read_excel(“documento.xlsx”, sheet = “nombre_de_hoja”)
+
+# Importar cualquier tipo de documento delimitado
+
+#	Delimitado por espacios
+Data_espacio <-read.table("C:/…/documento.dat", header=TRUE, sep= " ")
+
+#	Delimitado por Tab
+data_tab <-read.table("documento.dat", header=TRUE, sep= "\t")
+
+#	Formato de ancho fijo
+dataFW <-read.fwf("documento.txt", header=TRUE)
+
+# Importar desde ZIP (sin descomprimir previamente)
+data <- read.csv(zip.file.extract("~/documento.csv", "documento.zip"))
+data <- read.table(unz("documento.zip", "documento.dat"), nrows=10, header=T, quote="\"", sep=",")
+
+zipped <- "Documento.zip"
+documentos <- as.character(unzip(zipped, list = TRUE)$Nombre)
+lista <- vector("list", length(documentos))
+for (i in seq_along(documentos))
+        lista[[i]] = read.csv(unz(zipped, documentos[i]), stringsAsFactors = F)
+
+# Importar desde SPSS, STATA y SAS
+# SPSS
+library(foreign)
+data_SPSS <- read.spss("C:\mydata/documento.save", to.data.frame = TRUE)
+
+# STATA
+library(foreign)
+data_Stata <-read.dta("documento.dta", convert.factors=FALSE)
+
+# SAS
+library(foreign)
+data_SAS <- read.xport("C:/mydata/documento")
+
+# MongoDB
+library(jsonlite)
+library(mongolite)
+# Conectar con la base de datos y la colección de documentos
+db <- mongo(collection = "mycollection", db = "mydatabase", url = "mongodb://USERNAME:PASSWORD@HOSTNAME")
+# Los documentos se almacenan en un dataframe
+documentos <- db$find(limit = 100000, skip = 0, fields = '{ "_id" : false, "Text" : true }')
+
+# Google Drive
+library(googlesheets4)
+data <- read_sheet("https://docs.google.com/spreadsheets/d/1U6Cf_qEOhiR9AZqTqS3mbMF3zt2db48ZP5v3rkrAEJY/edit#gid=780868077")
+
+# Exportar datos desde Power BI
+write.csv(dataset, “C:\\User\\...\\midocumento.csv”, row.names = FALSE)
+nombre_tabla <- dataset
+
+# Exportar a Google Sheet
+library(googlesheets4)
+doc <- gs4_create(“desde_powerbi”, sheets = list( tabla1 = head( dataset ) ) ) 
+dataset %>% sheet_write( doc, sheet = “dataset” )
+mi_tabla <- dataset
+
+# Exportar a SQL Server
+library(sqldf)
+library(odbc)
+library(RMySQL) # para MySQL
+library(RSQLite)# para SQLite
+con <- dbConnect( odbc(), 
+		Driver = “SQL Server”,
+		Server = “ServerName”,
+		Database = “DBName”,
+		UID = “UserName”,
+		PWD = “Password”)
+dbWriteTable(con = con, 
+		name = “TableName”,
+		value = dataset ) # su tabla se llama dataset por defecto
+mi_tabla <- dataset
+
+# PostgreSQL
+library(RPostgreSQL)
+drv <- dbDriver("PostgreSQL")
+con <- dbConnect(drv, 
+user='UserName', 
+password='Password', 
+dbname='DBName', 
+host='host')
+dbWriteTable(con, name = "mi_tabla", value = dataset, row.names = FALSE)
+mi_tabla <- dataset
+
+
