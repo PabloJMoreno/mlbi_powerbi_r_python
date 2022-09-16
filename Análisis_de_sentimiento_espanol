@@ -1,0 +1,5 @@
+!pip install sentiment_analysis_spanish
+from sentiment_analysis_spanish import sentiment_analysi
+sentiment = sentiment_analysis.SentimentAnalysisSpanish()
+
+dataset['puntaje'] = dataset['comentario'].apply(lambda x: sentiment.sentiment(x))
