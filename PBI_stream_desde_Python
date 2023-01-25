@@ -1,0 +1,47 @@
+import urllib.request as urllib2
+import json
+import pandas as pd
+from datetime import datetime, date, timedelta
+
+# creacion de función para enviar datos creados desde Python (DataFrame) a Power BI Service
+def enviar_datos_powerbi_setreaming(API_POST_URL):
+    try:              
+        # Obtencion de datos de una fuente como Pandas DataFrame
+        df = pd.read_sql("SELECT * FROM ... ", con = connection) 
+        
+        # Inicio de cuantas transformaciones quiera realizar al data frame
+        # 
+        #
+        # Fin de las transformaciones
+        
+        
+        # Transformacion de fechas para formato stream de Power BI Service
+        df['date'] = [datetime.strftime(item, "%Y-%m-%dT%H:%M:%SZ") for item in df['fecha']]
+        
+        # En caso se querer instertar fechas en el streaming 
+        df['push_date'] = datetime.strftime(datetime.now(), "%Y-%m-%dT%H:%M:%SZ")
+        
+        # Preparar el cuerpo creando un json
+        body = bytes(df.to_json(orient='records'), encoding='utf-8')
+        
+        #API Post
+        req = urllib2.Request(REST_API_URL, body)
+        response = urllib2.urlopen(req)
+
+        #Imprimir resultados
+        print("POST request en Power BI con datos:{0}".format(body))
+        print("Respuesta: HTTP {0} {1}\n".format(response.getcode(), response.read()))		
+			
+    except urllib2.HTTPError as err:
+        print("Codigo de Error es: ", err.code)
+        print("Mensaje de ERROR es: ", err)
+    except Exception as ex:
+        print("Sys ERROR: ", sys.exc_info()[0])
+        print("Excepcion: ", ex)
+        
+       
+# En caso de ejecutar este archivo .py desde un VM:         
+if __name__ == '__main__':	
+    
+    REST_API_URL = "[API POST Power Bi URL]"
+    post_data_powerbi_setreaming_dataset(REST_API_URL)
